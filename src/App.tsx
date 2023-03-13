@@ -30,7 +30,6 @@ const messages = [
 ]
 
 function App() {
-  const navItems = ["main", "chat"]
   const [mobileOpen, setMobileOpen] = useState(false)
 
   function handleDrawerToggle() {
@@ -58,8 +57,8 @@ function App() {
   const navigate = useNavigate()
 
   return (
-    <Box sx={{paddingTop: 8}}>
-      <AppBar position="fixed">
+    <Box>
+      <AppBar position="static">
         <Container>
           <Toolbar>
             <IconButton
