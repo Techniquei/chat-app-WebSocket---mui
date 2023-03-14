@@ -20,6 +20,7 @@ export function ChatPage() {
   console.log(messagesState)
   const [inputState, setInputState] = useState("")
   const [readyStatus, setReadyStatus] = useState<'pending'|'ready'>('pending')
+  const myId = localStorage.getItem('myId') || ''
 
   function submit(e: any) {
     e.preventDefault()
@@ -72,7 +73,7 @@ export function ChatPage() {
               flexDirection: "row",
               gap: 2,
               width: "70%",
-              alignSelf: e.userName === "me" ? "end" : "start",
+              alignSelf: e.userId === Number(myId) ? "end" : "start",
               borderRadius: 3,
               minWidth: "200px",
             }}

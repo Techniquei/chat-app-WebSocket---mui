@@ -1,26 +1,19 @@
-import { Menu, Search, Send } from "@mui/icons-material"
+import { Menu } from "@mui/icons-material"
 import {
   IconButton,
   Toolbar,
   Typography,
   Button,
-  Stack,
-  ListItem,
-  Card,
-  CardContent,
-  Paper,
-  Avatar,
-  TextField,
-  InputBase,
   List,
   ListItemButton,
   ListItemText,
-  Drawer,
+  Drawer
 } from "@mui/material"
 import AppBar from "@mui/material/AppBar"
 import { Box, Container } from "@mui/system"
 import React, { useState } from "react"
 import { Outlet, useNavigate } from "react-router-dom"
+import { AuthModal } from "./components/authModal"
 
 const messages = [
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis vitae dolor a ultrices. Suspendisse et sagittis enim. Ut non felis a lectus convallis tristique dignissim vitae felis. Etiam accumsan hendrerit nisi in tristique. Sed vel tempor eros. Nunc cursus nulla eu tortor dapibus sagittis. Praesent lorem felis, mollis in molestie vitae, elementum a tellus.",
@@ -30,10 +23,16 @@ const messages = [
 ]
 
 function App() {
+  const navigate = useNavigate()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [authOpen, setAuthOpen] = useState(false)
 
   function handleDrawerToggle() {
     setMobileOpen((prevState) => !prevState)
+  }
+
+  function handleToggleAuth(){
+    setAuthOpen(!authOpen)
   }
 
   const drawer = (
@@ -54,7 +53,6 @@ function App() {
       </List>
     </Box>
   )
-  const navigate = useNavigate()
 
   return (
     <Box>
@@ -89,7 +87,7 @@ function App() {
                 chat
               </Button>
             </Box>
-            <Button variant="contained" color="warning" size="large">
+            <Button variant="contained" color="warning" size="large" onClick={handleToggleAuth}>
               Log In
             </Button>
           </Toolbar>
@@ -106,6 +104,7 @@ function App() {
           {drawer}
         </Drawer>
       </Box>
+      <AuthModal authOpen={authOpen} handleToggleAuth={handleToggleAuth} />
       <Outlet />
     </Box>
   )
