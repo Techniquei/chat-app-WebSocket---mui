@@ -7,33 +7,45 @@ import {
   List,
   ListItemButton,
   ListItemText,
-  Drawer
+  Drawer,
+  Avatar,
+  Link,
 } from "@mui/material"
 import AppBar from "@mui/material/AppBar"
 import { Box, Container } from "@mui/system"
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Outlet, useNavigate } from "react-router-dom"
 import { AuthModal } from "./components/authModal"
-
-const messages = [
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed convallis vitae dolor a ultrices. Suspendisse et sagittis enim. Ut non felis a lectus convallis tristique dignissim vitae felis. Etiam accumsan hendrerit nisi in tristique. Sed vel tempor eros. Nunc cursus nulla eu tortor dapibus sagittis. Praesent lorem felis, mollis in molestie vitae, elementum a tellus.",
-  "Interdum et malesuada fames ac ante ipsum primis in faucibus. Maecenas nisi tellus, gravida ac tincidunt at, dictum vel lorem. Donec euismod tempor ante vitae fermentum. Mauris nec ex cursus, dignissim mauris at, pulvinar mauris. Pellentesque nec nibh a nisi ultrices hendrerit a id leo. Curabitur euismod tortor ac nunc efficitur dapibus. Donec posuere, tellus eu egestas ultrices, velit nisi imperdiet sapien, sit amet elementum massa justo non nulla. Aenean et mollis lectus, vitae efficitur dolor. Do",
-  " libero, vitae sollicitudin enim ullamcorper id. Fusce ut placerat nisl. In placerat, tortor et convallis pulvinar, diam massa vehicula ante, vel sodales metus metus non tor",
-  "as nunc massa, malesuada et velit non, suscipit blandit nisi. Proin et orci vel elit tempus blandit. Pellentesque ante dolor, venenatis at finibus finibus, dapibus quis justo. Proin varius nisl eget lectus tempus fringilla. Vestibulum vitae neque ac nisi porta suscipit eget a metus. Ut ut tincidunt velit, ac dictum erat. Mauris eget erat eget felis bibendum element",
-]
+import { fetchUserProfile, useAppDispatch, useAppSelector } from "./store"
 
 function App() {
+  const dispatch = useAppDispatch()
+
   const navigate = useNavigate()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [authOpen, setAuthOpen] = useState(false)
+  useEffect(() => {
+    const myId = localStorage.getItem("myId")
+    if (myId !== null) {
+      dispatch(fetchUserProfile(myId))
+    }
+  }, [])
 
   function handleDrawerToggle() {
     setMobileOpen((prevState) => !prevState)
   }
 
-  function handleToggleAuth(){
+  function handleToggleAuth() {
     setAuthOpen(!authOpen)
   }
+
+  const name = useAppSelector((state) => {
+        return state.profile ? state.profile.fullName : undefined
+  })
+  console.log(name)
+  const photo = useAppSelector((state) => {
+    return state.profile ? state.profile.photos?.small : undefined
+  })
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
@@ -58,7 +70,7 @@ function App() {
     <Box>
       <AppBar position="static">
         <Container>
-          <Toolbar>
+          <Toolbar sx={{gap: 1}}  >
             <IconButton
               edge="start"
               onClick={handleDrawerToggle}
@@ -87,9 +99,22 @@ function App() {
                 chat
               </Button>
             </Box>
-            <Button variant="contained" color="warning" size="large" onClick={handleToggleAuth}>
-              Log In
-            </Button>
+            {name !== undefined ? (
+              <Button sx={{color: 'white', textTransform: 'none', gap: 1}} onClick={()=>navigate(`profile/${localStorage.getItem("myId")}`)}>
+                <Typography>{name}</Typography>
+                <Avatar src={photo} />
+              </Button>
+              
+            ) : (
+              <Button
+                variant="contained"
+                color="warning"
+                size="large"
+                onClick={handleToggleAuth}
+              >
+                Log In
+              </Button>
+            )}
           </Toolbar>
         </Container>
       </AppBar>

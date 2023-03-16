@@ -6,6 +6,9 @@ import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { ChatPage } from './pages/ChatPage';
 import { MainPage } from './pages/MainPage';
+import { Provider } from 'react-redux';
+import { store } from './store';
+import { ProfilePage } from './pages/ProfilePage';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -23,13 +26,20 @@ const router = createBrowserRouter([
       {
         path: 'chat',
         element: <ChatPage />
+      },
+      {
+        path: 'profile/:id',
+        element: <ProfilePage />
       }
     ]
   }
 ])
 
 root.render(
+  <Provider store={store}>
     <RouterProvider router={router} />
+  </Provider>
+    
 );
 
 // If you want to start measuring performance in your app, pass a function

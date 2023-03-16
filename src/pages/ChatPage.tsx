@@ -2,7 +2,8 @@ import { Send } from "@mui/icons-material"
 import { Avatar, CircularProgress, IconButton, InputBase, Paper, Typography } from "@mui/material"
 import { Box, Container, Stack } from "@mui/system"
 import React from "react"
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef, useEffect, useMemo } from "react"
+import { useNavigate } from "react-router-dom"
 
 export type ChatMessageType = {
   message: string
@@ -12,12 +13,12 @@ export type ChatMessageType = {
 }
 
 export function ChatPage() {
-  const ws = new WebSocket(
+  const navigate = useNavigate()
+  const ws = useMemo(()=>new WebSocket(
     "wss://social-network.samuraijs.com/handlers/ChatHandler.ashx"
-  )
+  ), [])
   const myRef = useRef<null | HTMLDivElement>(null)
   const [messagesState, setMessagesState] = useState<ChatMessageType[]>([])
-  console.log(messagesState)
   const [inputState, setInputState] = useState("")
   const [readyStatus, setReadyStatus] = useState<'pending'|'ready'>('pending')
   const myId = localStorage.getItem('myId') || ''
@@ -40,11 +41,16 @@ export function ChatPage() {
       setReadyStatus('ready')
     })
     ws.addEventListener("message", webSocketHandler)
+    if (myRef.current) {
+      myRef.current.scrollIntoView({
+        behavior: "smooth",
+      })
+    }
     return (()=>{
       ws.removeEventListener("message", webSocketHandler);
       ws.close()
     })
-  }, [])
+  }, [ws])
 
   useEffect(() => {
     if (myRef.current) {
@@ -76,8 +82,10 @@ export function ChatPage() {
               alignSelf: e.userId === Number(myId) ? "end" : "start",
               borderRadius: 3,
               minWidth: "200px",
+              cursor: 'pointer'
             }}
             elevation={10}
+            onClick={()=>navigate(`/profile/${e.userId}`)}
           >
             <Avatar src={e.photo} sx={{ width: 60, height: 60 }} />
             <Box>
