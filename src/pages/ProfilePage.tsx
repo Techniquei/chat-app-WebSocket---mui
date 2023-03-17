@@ -2,6 +2,7 @@ import {
   Avatar,
   CircularProgress,
   Grid,
+  Link,
   List,
   ListItem,
   Paper,
@@ -23,7 +24,7 @@ export function ProfilePage() {
     if (id) {
       userAPI.getProfile(id).then((res) => setProfileState(res.data))
     }
-  }, [])
+  }, [id])
 
   if (profileState === null) return <CircularProgress sx={{ width: "auto" }} />
 
@@ -52,9 +53,9 @@ export function ProfilePage() {
           </Paper>
           <Typography variant="h4">{profileState.fullName}</Typography>
           <List>
-            {contacts.map((e)=><ListItem sx={{paddingInline: 0, flexDirection: 'column', alignItems: 'flex-start'}}>
+            {contacts.map((e)=><ListItem key={e.net} sx={{paddingInline: 0, flexDirection: 'column', alignItems: 'flex-start'}}>
                 <Typography variant="h6">{e.net}</Typography>
-                <Typography variant="subtitle1">{e.link}</Typography>
+                <Link href={e.link} variant="subtitle1">{e.link}</Link>
             </ListItem>)}
           </List>
         </Grid>
