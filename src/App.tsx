@@ -29,7 +29,7 @@ function App() {
     if (myId !== null) {
       dispatch(fetchUserProfile(myId))
     }
-  }, [])
+  }, [authOpen])
 
   function handleDrawerToggle() {
     setMobileOpen((prevState) => !prevState)

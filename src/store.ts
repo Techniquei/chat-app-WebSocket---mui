@@ -46,7 +46,6 @@ const profileSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchUserProfile.fulfilled, (state, action) => {
-      // state.profile = action.payload
       for(let i in action.payload){
         state[i as keyof ProfileInterface] = action.payload[i]
       }

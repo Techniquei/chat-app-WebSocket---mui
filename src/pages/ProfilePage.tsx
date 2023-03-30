@@ -11,7 +11,6 @@ import {
 import { useParams } from "react-router-dom"
 import { userAPI } from "../api/axios"
 import { useState, useEffect } from "react"
-import { AxiosResponse } from "axios"
 import { ProfileInterface } from "../store"
 import { Container } from "@mui/system"
 
